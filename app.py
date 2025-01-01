@@ -3,11 +3,17 @@ import csv
 import time
 import smtplib
 import imaplib
+import re
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
 
 load_dotenv()
+
+def is_valid_email(email):
+    """Validate email address format"""
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return bool(re.match(pattern, email.strip()))
 
 def read_recipients():
     """Read recipients from CSV file"""
@@ -16,9 +22,18 @@ def read_recipients():
         with open('recipients.csv', 'r') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                to_email = row['to_email']
-                # Split CC emails by semicolon
-                cc_emails = row['cc_emails'].split(';') if row['cc_emails'] else []
+                to_email = row['to_email'].strip()
+                # Skip if TO email is invalid
+                if not is_valid_email(to_email):
+                    print(f"Skipping invalid TO email: {to_email}")
+                    continue
+                    
+                # Split CC emails by semicolon and validate each
+                cc_emails = []
+                if row['cc_emails']:
+                    cc_emails = [email.strip() for email in row['cc_emails'].split(';')]
+                    cc_emails = [email for email in cc_emails if is_valid_email(email)]
+                    
                 recipients_list.append({
                     'to': to_email,
                     'cc': cc_emails
@@ -129,8 +144,8 @@ def send_email(subject):
             print(f"TO: {recipient['to']}")
             print(f"CC: {', '.join(recipient['cc'])}")
             
-            # Wait a 10 seconds between sends
-            time.sleep(10)
+            # Wait a 7.5 minutes between sends
+            time.sleep(450)
             
         except Exception as e:
             print(f"\nError sending to {recipient['to']}: {str(e)}")

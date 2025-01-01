@@ -1,4 +1,4 @@
-# Roundcube SMTP PythonEmail Sender
+# Roundcube SMTP Python Email Sender
 
 A Python script for sending HTML emails with CC functionality using SMTP and managing sent items via IMAP.
 

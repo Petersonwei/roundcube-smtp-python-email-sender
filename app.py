@@ -140,5 +140,7 @@ def send_email(subject):
             continue
 
 if __name__ == "__main__":
-    subject = "Test python automation email: Innovative Nonwoven Solutions Partnership"
+    subject = os.environ.get('EMAIL_SUBJECT')
+    if not subject:
+        raise ValueError("EMAIL_SUBJECT environment variable is not set")
     send_email(subject)

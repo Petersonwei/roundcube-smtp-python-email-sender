@@ -30,7 +30,8 @@ roundcube-email-sender/
 ├── recipients.csv     # Recipient list configuration
 ├── .env              # Environment configuration
 ├── .gitignore        # Git ignore file
-└── README.md         # This file
+├── README.md         # This file
+└── requirements.txt  # Python dependencies
 
 ```
 
@@ -46,6 +47,7 @@ export EMAIL_PASSWORD="your_password"
 export SMTP_SERVER="your.smtp.server"
 export SMTP_PORT=465
 export SENDER_NAME="Your Name"
+export EMAIL_SUBJECT="Your Email Subject"
 ```
 
 ### 2. Recipients List (recipients.csv)

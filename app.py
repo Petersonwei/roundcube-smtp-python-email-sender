@@ -144,8 +144,8 @@ def send_email(subject):
             print(f"TO: {recipient['to']}")
             print(f"CC: {', '.join(recipient['cc'])}")
             
-            # Wait a 7.5 minutes between sends
-            time.sleep(450)
+            # Wait a minutes between sends
+            time.sleep(90)
             
         except Exception as e:
             print(f"\nError sending to {recipient['to']}: {str(e)}")

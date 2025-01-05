@@ -119,11 +119,16 @@ def send_email(subject):
             message['From'] = f"{sender_name} <{sender_email}>"
             message['To'] = recipient['to']
             message['Cc'] = ', '.join(recipient['cc'])
-            message['Subject'] = subject
+            
+            # Personalize subject with company name if available
+            company_name = recipient.get('company_name', '').strip()
+            personalized_subject = subject
+            if company_name:
+                personalized_subject = f"{company_name} - {subject}"
+            message['Subject'] = personalized_subject
             
             # Personalize the HTML content
             personalized_html = html_content
-            company_name = recipient.get('company_name', '').strip()
             greeting = "Dear Team" if not company_name else f"Dear {company_name} Team"
             
             # Replace both instances of the greeting in the HTML

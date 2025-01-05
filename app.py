@@ -36,7 +36,8 @@ def read_recipients():
                     
                 recipients_list.append({
                     'to': to_email,
-                    'cc': cc_emails
+                    'cc': cc_emails,
+                    'company_name': row.get('company_name', '').strip()
                 })
     except Exception as e:
         print(f"Error reading recipients: {str(e)}")
@@ -120,9 +121,19 @@ def send_email(subject):
             message['Cc'] = ', '.join(recipient['cc'])
             message['Subject'] = subject
             
+            # Personalize the HTML content
+            personalized_html = html_content
+            company_name = recipient.get('company_name', '').strip()
+            greeting = "Dear Team" if not company_name else f"Dear {company_name} Team"
+            
+            # Replace both instances of the greeting in the HTML
+            personalized_html = personalized_html.replace('Greetings,', f'{greeting},')
+            personalized_html = personalized_html.replace('<p style="font-size: clamp(14px, 3vw, 16px);">Greetings</p>', 
+                                                        f'<p style="font-size: clamp(14px, 3vw, 16px);">{greeting}</p>')
+            
             # Add HTML and plain text content
             text_part = MIMEText("Please view this email in an HTML-capable email client.", 'plain')
-            html_part = MIMEText(html_content, 'html')
+            html_part = MIMEText(personalized_html, 'html')
             
             message.attach(text_part)
             message.attach(html_part)
